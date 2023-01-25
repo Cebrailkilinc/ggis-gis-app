@@ -1,0 +1,71 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+.table-drag-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+.drag-item-left{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.menu-item-field{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: white;
+  padding: 15px;
+  margin-top: 30px;
+  border-radius: 5px;
+}
+
+.item-close-button{
+  color: #141414;
+  cursor: pointer;
+}
+.item-close-button:hover{
+  color: #595959;
+  transition: 0.5s;
+}
+
+.css-dev-only-do-not-override-1i9hnpv{
+  width: 100%;
+}
+
+.ant-modal-footer{
+  display: flex;
+}
+.add-user-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.add-user-form-content{ 
+  display: flex;
+  flex-direction: column;  
+  padding: 30px;
+  gap: 10px;
+  width: 100%;
+}
+.user-form-field{
+  display: flex;  
+  flex-direction: column;
+ 
+}
+.user-form-field-input{
+  outline: none;
+  padding: 5px;
+  width: 100%;
+  
+  
+}
