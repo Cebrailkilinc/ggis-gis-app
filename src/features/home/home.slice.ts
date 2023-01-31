@@ -1,12 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PersonState } from "../../types/types";
+import { UserState } from "../../types/types";
 
-const initialState: PersonState = {
-  persons: [
+const initialState: UserState = {
+  users: [
     {
-      id: 1,
-      name: "John",
-      age: 32,
+      key: "2",
+      firstName: "Jim",
+      lastName: "Green",
+      age: 42,
+      address: "London No. 1 Lake Park",
+      tags: ["loser"],
     },
   ],
 };
@@ -14,7 +17,14 @@ const initialState: PersonState = {
 const PersonSlice = createSlice({
   name: "person",
   initialState,
-  reducers: {},
+  reducers: {
+    addUser: (state, action) => {
+      console.log("Adding");
+      console.log(state.users);
+      state.users.push(action.payload);
+    },
+  },
 });
 
+export const { addUser } = PersonSlice.actions;
 export default PersonSlice.reducer;

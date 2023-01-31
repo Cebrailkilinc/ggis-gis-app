@@ -1,40 +1,17 @@
 import React, { FC } from "react";
 import { Space, Table, Tag } from "antd";
-import { useAppSelector } from "../../app/hooks";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { UserType } from "../../types/types";
 import UserModal from "../../components/Modal";
+import { addUser } from "../../features/home/home.slice";
 
 const { Column, ColumnGroup } = Table;
 
-const data: UserType[] = [
-  {
-    key: "1",
-    firstName: "John",
-    lastName: "Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    firstName: "Jim",
-    lastName: "Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    firstName: "Joe",
-    lastName: "Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
-
 const Content: FC = () => {
   const datas = useAppSelector((state) => state.table.columns);
+  const users = useAppSelector((state) => state.person.users);
+
+  const dispatch = useAppDispatch();
   console.log(datas);
 
   const columns = datas.map((item) => {
@@ -52,7 +29,7 @@ const Content: FC = () => {
   return (
     <>
       {columns.length !== 0 ? (
-        <Table style={{ padding: "30px" }} dataSource={data}>
+        <Table style={{ padding: "30px" }} dataSource={users}>
           {columns.map((item: any, i) => {
             return (
               <Column

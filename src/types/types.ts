@@ -26,3 +26,7 @@ export interface UserType {
   address: string;
   tags: string[];
 }
+
+export interface UserState {
+  users: UserType[];
+}
