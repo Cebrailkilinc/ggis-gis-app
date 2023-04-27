@@ -1,23 +1,29 @@
 //Import Package
 import React, { FC } from "react";
 import { useState } from "react";
-import { Button } from "antd";
 import "antd/dist/reset.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 //Import Component and Pages
-import Home from "./pages/Home";
-import Container from "./layout";
+import Home from "./pages/home";
+import Login from "./pages/auth/login/Login";
+import Gis from "./pages/gis";
 
 //Import Css
 import "./App.css";
+import PrivateRoute from "./routes/PrivateRoute";
 
 const App: FC = () => {
-  const [count, setCount] = useState(0);
-  console.log(count);
   return (
-    <div>
-      <Container />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/modules/gis" element={<Gis />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

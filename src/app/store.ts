@@ -1,11 +1,9 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import PersonSlice from "../features/home/home.slice";
-import TableSlice from "../features/person/table.slice";
 
 export const store = configureStore({
   reducer: {
     person: PersonSlice,
-    table: TableSlice,
   },
 });
 

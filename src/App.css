@@ -66,6 +66,13 @@
   outline: none;
   padding: 5px;
   width: 100%;
+  border-radius: 5px;
+  border: none;
+  border: 1px solid;
+  border-color: #b6b6b6; 
   
   
+}
+.user-form-field-input:focus{
+  border-color: #4096FF;  
 }

@@ -24,9 +24,27 @@ export interface UserType {
   lastName: string;
   age: number;
   address: string;
-  tags: string[];
 }
 
 export interface UserState {
   users: UserType[];
 }
+
+export interface User {
+  username: string;
+  email: string;
+  date: Date;
+  id: string;
+}
+
+export interface RootUserObject {
+  status: string;
+  user: User;
+  token: string;
+}
+
+export interface Coords {
+  lat: number;
+  lon: number;
+}
+export type SetCoords = React.Dispatch<React.SetStateAction<Coords>>;

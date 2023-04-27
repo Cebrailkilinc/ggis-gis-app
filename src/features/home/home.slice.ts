@@ -9,7 +9,6 @@ const initialState: UserState = {
       lastName: "Green",
       age: 42,
       address: "London No. 1 Lake Park",
-      tags: ["loser"],
     },
   ],
 };
@@ -19,8 +18,7 @@ const PersonSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action) => {
-      console.log("Adding");
-      console.log(state.users);
+      console.log(action.payload);
       state.users.push(action.payload);
     },
   },
