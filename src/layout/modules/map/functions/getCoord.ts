@@ -1,3 +1,4 @@
+import { LatLngExpression } from "leaflet";
 import { SetCoords } from "../../../../types/types";
 
 export function handleMouseMove(event: any, setCoords: SetCoords): void {
@@ -19,3 +20,4 @@ export function pixelToLatLon(
   const lon = (x / width) * 360 - 180;
   return [lat, lon];
 }
+

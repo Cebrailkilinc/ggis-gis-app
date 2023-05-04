@@ -1,0 +1,30 @@
+.geocoder-container {
+  position: absolute;
+  right: 0%;
+  top: 80px;
+  padding: 20px;
+  z-index: 30;
+}
+.ant-input-group > .ant-input:first-child {
+  background-color: white;
+  opacity: 0.8;
+}
+
+.geocoder-container-table {
+  background-color: white;
+  border-radius: 10px;
+  opacity: 0.8;
+  margin-top: 10px;
+  font-size: 10px;
+}
+.ant-list-header > div {
+  padding: 0%;
+}
+.ant-list-items {
+  font-size: 10px;
+  padding: 0%;
+}
+.ant-list-items .ant-list-item {
+  padding: 5px 20px;
+}
+
