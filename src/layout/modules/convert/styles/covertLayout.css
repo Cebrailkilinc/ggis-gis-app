@@ -1,0 +1,44 @@
+.header-style{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    
+}
+.coord-content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  padding-top: 50px;
+}
+.input-coord-system>h2{
+    color: gray;
+    border-bottom: 1px solid rgb(176, 176, 176);
+    padding-bottom: 5px;
+    
+}
+
+.input-coord-system-input{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 10px;
+}
+
+.input-coordinate-name{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.input-area{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;    
+    justify-content: end;
+    padding-top: 30px;
+}
+
+.coord-input-area{
+    width: 200px;
+}
+

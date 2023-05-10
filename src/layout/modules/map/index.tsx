@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Checkbox, Layout, Tooltip } from "antd";
+import { Layout, Tooltip } from "antd";
 import "./gisLayout.css";
 import { MapContainer, TileLayer, Marker, useMapEvents, Polygon, Popup, GeoJSON } from "react-leaflet";
 import { LatLngExpression, LeafletMouseEvent, } from "leaflet";
@@ -10,9 +10,25 @@ import { RiAddBoxLine } from "react-icons/ri";
 import { AiFillCloseSquare } from "react-icons/ai";
 import proj4 from "proj4";
 import dataLand from "./land.json";
+import MapRouting from "./components/mapRouting/MapRouting";
+import SelectFile from "./components/selectLocalFile/SelectFile";
+import axios from "axios";
+import { GeoJsonObject } from "geojson";
+import { continents } from "./continents2";
 
 
-
+interface IFile{
+  type: string;
+  features: {
+      type: string;
+      properties: any;
+      geometry: {
+          type: string;
+          coordinates: number[][][];
+      };
+  }[];
+  bbox: number[];
+}
 
 //FUNCTIONAL COMPONENT
 const GisLayout: FC = () => {
@@ -23,6 +39,10 @@ const GisLayout: FC = () => {
   const [deletePointActive, setDeletePointActive] = useState<boolean>(false);
   const [baseMap, setBaseMap] = useState<boolean>(true);
   const markerRef = useRef(null)
+
+  const [readShapfile, setReadShapfile] = useState<IFile>();
+  
+
 
   // MAP CONTAINER STYLES
   const { Sider, Content } = Layout;
@@ -122,6 +142,16 @@ const GisLayout: FC = () => {
     setPositionTUREF96(ITRF96)
   }, [positionWGS84, positionWGS84.lat, positionWGS84.lng])
 
+  useEffect(() => {
+    const data = () => axios.get("http://localhost:5000/test").then(res => {      
+      setReadShapfile(res.data)
+      console.log(res.data.split("/"))
+      return res.data
+    })
+    data();
+    console.log(readShapfile)
+  }, [])
+  
   return (
     <Layout>
       <Sider style={siderStyle}>
@@ -131,6 +161,7 @@ const GisLayout: FC = () => {
             <input onChange={handleBasemap} checked={baseMap} type={"checkbox"} />
             <h3>Base Map</h3>
           </div>
+          <SelectFile />
         </div>
       </Sider>
       <Layout>
@@ -170,7 +201,7 @@ const GisLayout: FC = () => {
         </div>
         <Content>
           <div id="map" onClick={handleMapClick} className="gis-layout-content">
-          {/* <Geocoder /> */}
+            {/* <Geocoder /> */}
             <MapContainer
               className="map-container"
               center={center}
@@ -190,6 +221,7 @@ const GisLayout: FC = () => {
                 zoomOffset={-1}
                 accessToken="pk.eyJ1IjoiYWJkdWxsYWh1Z3VyIiwiYSI6ImNqcHRnaDgxbDA1dWo0NXF3NDIzenFtcGIifQ.64t6cmzJ79MTvJzQNjShMA"
               />
+              <GeoJSON data={continents as GeoJsonObject} />
               {addPoints.map(
                 (point: any, index: React.Key | null | undefined) => (
                   <Marker
