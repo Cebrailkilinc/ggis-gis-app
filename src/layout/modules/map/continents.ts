@@ -1,4 +1,18 @@
-export const continents ={
+interface GeoJSONPolygon {
+    type: "FeatureCollection",
+    features: [{
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Polygon",
+        coordinates: Array<Array<[number, number]>>
+      }
+    }],
+    bbox: [number, number, number, number]
+  }
+
+
+export const continents:GeoJSONPolygon = {
   "type": "FeatureCollection",
   "features": [
       {

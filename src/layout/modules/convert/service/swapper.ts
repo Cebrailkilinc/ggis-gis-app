@@ -2,10 +2,10 @@
 
  const allCoordinateSystems = [
   {
-    name: "WGS84 - World Geodetic System 1984",
-    epsgCode: "4623",
+    name: "WGS84",
+    epsgCode: "4326",
     swapperCode: "+proj=longlat +datum=WGS84 +no_defs +type=crs",
-  },
+  }, 
   {
     name: "TUREF / TM30",
     epsgCode: "5254",

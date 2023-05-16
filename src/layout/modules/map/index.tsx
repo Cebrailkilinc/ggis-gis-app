@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Layout, Tooltip } from "antd";
 import "./gisLayout.css";
-import { MapContainer, TileLayer, Marker, useMapEvents, Polygon, Popup, GeoJSON } from "react-leaflet";
-import { LatLngExpression, LeafletMouseEvent, } from "leaflet";
+import { MapContainer, TileLayer, Marker, useMapEvents, Popup, GeoJSON } from "react-leaflet";
+import { LatLngExpression, LeafletMouseEvent } from "leaflet";
 import L from "leaflet";
 
 
@@ -13,21 +13,21 @@ import dataLand from "./land.json";
 import MapRouting from "./components/mapRouting/MapRouting";
 import SelectFile from "./components/selectLocalFile/SelectFile";
 import axios from "axios";
-import { GeoJsonObject } from "geojson";
-import { continents } from "./continents2";
+import { GeoJsonObject, Polygon } from "geojson";
+import { continents } from "./continents";
 
 
-interface IFile{
-  type: string;
-  features: {
-      type: string;
-      properties: any;
-      geometry: {
-          type: string;
-          coordinates: number[][][];
-      };
-  }[];
-  bbox: number[];
+interface GeoJSONPolygon {
+  type: "FeatureCollection",
+  features: [{
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "Polygon",
+      coordinates: Array<Array<[number, number]>>
+    }
+  }],
+  bbox: [number, number, number, number]
 }
 
 //FUNCTIONAL COMPONENT
@@ -38,10 +38,11 @@ const GisLayout: FC = () => {
   const [addPointActive, setAddPointActive] = useState<boolean>(false);
   const [deletePointActive, setDeletePointActive] = useState<boolean>(false);
   const [baseMap, setBaseMap] = useState<boolean>(true);
+
+  const [readShapfile, setReadShapfile] = useState();
+
   const markerRef = useRef(null)
 
-  const [readShapfile, setReadShapfile] = useState<IFile>();
-  
 
 
   // MAP CONTAINER STYLES
@@ -94,7 +95,6 @@ const GisLayout: FC = () => {
   //Base map ekleme çıkarma 
   const handleBasemap = (e: any): void => {
     setBaseMap(!baseMap);
-    console.log(e.target.checked)
   };
 
   // Haritaya tıknalındıpında yapılması gereken tüm işlemler burda yapılmalı
@@ -143,15 +143,19 @@ const GisLayout: FC = () => {
   }, [positionWGS84, positionWGS84.lat, positionWGS84.lng])
 
   useEffect(() => {
-    const data = () => axios.get("http://localhost:5000/test").then(res => {      
-      setReadShapfile(res.data)
-      console.log(res.data.split("/"))
-      return res.data
-    })
-    data();
-    console.log(readShapfile)
+ 
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/test");        
+        setReadShapfile(response.data);
+        // İstek tamamlandıktan sonra verileri kullanabilirsiniz.
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();    
   }, [])
-  
+
   return (
     <Layout>
       <Sider style={siderStyle}>
@@ -210,9 +214,7 @@ const GisLayout: FC = () => {
               style={{ backgroundColor: "white", cursor: addPointActive ? "pointer" : "move" }}
               ref={markerRef}
             >
-              <LocationMarker />
-              <Polygon eventHandlers={{ click: () => console.log("first") }} pathOptions={purpleOptions} positions={polygon}>
-              </Polygon>
+              <LocationMarker />             
               <TileLayer
                 url={baseMap ? `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}` : ""}
                 attribution="Map data &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
@@ -221,7 +223,11 @@ const GisLayout: FC = () => {
                 zoomOffset={-1}
                 accessToken="pk.eyJ1IjoiYWJkdWxsYWh1Z3VyIiwiYSI6ImNqcHRnaDgxbDA1dWo0NXF3NDIzenFtcGIifQ.64t6cmzJ79MTvJzQNjShMA"
               />
-              <GeoJSON data={continents as GeoJsonObject} />
+
+              {
+                readShapfile && <GeoJSON data={readShapfile as GeoJsonObject} />
+              }
+              
               {addPoints.map(
                 (point: any, index: React.Key | null | undefined) => (
                   <Marker

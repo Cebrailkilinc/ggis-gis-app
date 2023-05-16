@@ -18,7 +18,7 @@ import CesiumPg from "./pages/cesium";
 
 const App: FC = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter>   
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth/login" element={<Login />} />

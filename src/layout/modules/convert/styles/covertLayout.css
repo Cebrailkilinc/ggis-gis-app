@@ -1,44 +1,69 @@
-.header-style{
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    
+.header-style {
+  text-align: center;
+  display: flex;
+  justify-content: center;
 }
-.coord-content{
+.coord-content {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 80px;
   padding-top: 50px;
 }
-.input-coord-system>h2{
-    color: gray;
-    border-bottom: 1px solid rgb(176, 176, 176);
-    padding-bottom: 5px;
-    
+.input-coord-system > h2 {
+  color: gray;
+  border-bottom: 1px solid rgb(176, 176, 176);
+  padding-bottom: 5px;
 }
 
-.input-coord-system-input{
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding-top: 10px;
+.input-coord-system-input {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-top: 10px;
 }
 
-.input-coordinate-name{
-    display: flex;
-    align-items: center;
-    gap: 5px;
+.input-coordinate-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-.input-area{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;    
-    justify-content: end;
-    padding-top: 30px;
+.input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: end;
+  padding-top: 30px;
 }
 
-.coord-input-area{
-    width: 200px;
+.coord-input-area {
+  width: 200px;
+}
+
+/* FileTable Component */
+table,
+td,
+th {
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+ }
+
+th,
+td {
+  padding: 15px;
+}
+
+.file-table-container {
+  overflow-x: auto;
+  max-width: 1000px;
+}
+
+.table-row:hover{
+  background-color: red;
+  opacity: 0.7;
 }
 
