@@ -75,7 +75,7 @@ const CesiumLayout = () => {
         <Entity name="Yellow plane outline" position={center} plane={outlineplane} />
 
         <CameraFlyTo duration={8}
-          destination={Cartesian3.fromDegrees(99.64, 24.89, 20000)}
+          destination={Cartesian3.fromDegrees(36, 37, 20000)}
           orientation={{
             heading: -4.98,
             pitch: -0.32003481981370063,
