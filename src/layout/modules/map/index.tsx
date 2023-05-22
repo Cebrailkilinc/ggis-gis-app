@@ -15,20 +15,8 @@ import SelectFile from "./components/selectLocalFile/SelectFile";
 import axios from "axios";
 import { GeoJsonObject, Polygon } from "geojson";
 import { continents } from "./continents";
+import { IGeoJSONPolygon } from "../../../types/types";
 
-
-interface GeoJSONPolygon {
-  type: "FeatureCollection",
-  features: [{
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "Polygon",
-      coordinates: Array<Array<[number, number]>>
-    }
-  }],
-  bbox: [number, number, number, number]
-}
 
 //FUNCTIONAL COMPONENT
 const GisLayout: FC = () => {
@@ -39,10 +27,9 @@ const GisLayout: FC = () => {
   const [deletePointActive, setDeletePointActive] = useState<boolean>(false);
   const [baseMap, setBaseMap] = useState<boolean>(true);
 
-  const [readShapfile, setReadShapfile] = useState();
+  const [readShapfile, setReadShapfile] = useState<IGeoJSONPolygon >();
 
   const markerRef = useRef(null)
-
 
 
   // MAP CONTAINER STYLES
@@ -142,12 +129,12 @@ const GisLayout: FC = () => {
     setPositionTUREF96(ITRF96)
   }, [positionWGS84, positionWGS84.lat, positionWGS84.lng])
 
-  useEffect(() => {
- 
+  useEffect(() => { 
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:5000/test");        
         setReadShapfile(response.data);
+        console.log(response.data);
         // İstek tamamlandıktan sonra verileri kullanabilirsiniz.
       } catch (error) {
         console.error(error);

@@ -1,11 +1,13 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import PersonSlice from "../features/home/home.slice";
 import ConvertSlice from "../features/convert/convert.slice";
+import gisSlice from "../features/gis/gis.slice";
 
 export const store = configureStore({
   reducer: {
     person: PersonSlice,
-    convert: ConvertSlice
+    convert: ConvertSlice,
+    gis: gisSlice
   },
 });
 

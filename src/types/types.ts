@@ -48,3 +48,16 @@ export interface Coords {
   lon: number;
 }
 export type SetCoords = React.Dispatch<React.SetStateAction<Coords>>;
+
+export interface IGeoJSONPolygon {
+  type: "FeatureCollection",
+  features: [{
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "Polygon",
+      coordinates: Array<Array<[number, number]>>
+    }
+  }],
+  bbox: [number, number, number, number]
+}

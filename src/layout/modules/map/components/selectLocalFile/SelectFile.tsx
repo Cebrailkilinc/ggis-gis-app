@@ -1,33 +1,56 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react';
+import axios from 'axios';
+import { useDropzone } from 'react-dropzone';
+import { BsUpload } from "react-icons/bs";
 
 const SelectFile = () => {
 
-    const [shpFile, setShpFile] = useState("")
+  const [selectedFile, setSelectedFile] = useState<any>(null);
 
-    const handleImageSelectLocal = (e: any) => {
-        if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                if (e.target?.result) {
-                    console.log(e.target.result as string)
-                    setShpFile(e.target.result as string);
-                }                
-            };
-            reader.readAsDataURL(e.target?.files[0]);
-        }
-    };
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setSelectedFile(acceptedFiles[0]);
+  }, []);
 
-    return (
-        <div>
-            <label className=" bg-cyan-600 px-2 py-3 rounded-md text-xs ml-2  text-white cursor-pointer hover:opacity-60" htmlFor="file_input">{shpFile ? "Image Added!" : "Add Image"} </label>
-            <input
-                onChange={handleImageSelectLocal}
-                className="hidden w-full  text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300  dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                id="file_input"
-                type="file"
-            />
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    if (selectedFile) {
+      console.log(selectedFile);
+    }
+    const formData = new FormData();
+    formData.append('shapefile', selectedFile);
+    try {
+      // Backend'e POST isteği gönder
+      await axios.post('http://localhost:5000/upload', formData, { 
+        headers: { 'Content-Type': 'multipart/form-data' }
+       })
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        });
+    } catch (error) {
+      console.error('Dosya yükleme hatası:', error);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p>Dosyayı buraya bırakın...</p>
+          ) : (
+            <p>Dosyayı sürükleyin veya buraya tıklayın.</p>
+          )}
         </div>
-    )
+        <button type="submit">Dosyayı Gönder</button>
+      </form>
+    </div>
+  )
 }
 
 export default SelectFile
