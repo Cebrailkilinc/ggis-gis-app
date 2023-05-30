@@ -19,7 +19,12 @@ const initialState:IGeoJSONPolygon = {
 const GisSlice = createSlice({
     name:"gis",
     initialState,
-    reducers:{}
+    reducers:{
+        getSelectLocalShpFile(state, action){
+        state = action.payload;
+        console.log(action.payload)
+    },}
 })
 
+export const {  getSelectLocalShpFile  } = GisSlice.actions;
 export default GisSlice.reducer;

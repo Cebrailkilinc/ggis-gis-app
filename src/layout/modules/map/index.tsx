@@ -5,17 +5,19 @@ import { MapContainer, TileLayer, Marker, useMapEvents, Popup, GeoJSON } from "r
 import { LatLngExpression, LeafletMouseEvent } from "leaflet";
 import L from "leaflet";
 
-
 import { RiAddBoxLine } from "react-icons/ri";
 import { AiFillCloseSquare } from "react-icons/ai";
-import proj4 from "proj4";
-import dataLand from "./land.json";
-import MapRouting from "./components/mapRouting/MapRouting";
-import SelectFile from "./components/selectLocalFile/SelectFile";
+import { BsUpload } from "react-icons/bs";
+
 import axios from "axios";
+import proj4 from "proj4";
+
+import SelectFile from "./components/selectLocalFile/SelectFile";
+
 import { GeoJsonObject, Polygon } from "geojson";
-import { continents } from "./continents";
-import { IGeoJSONPolygon } from "../../../types/types";
+import { IGeoJSONPolygon, IAllGeoJSONPolygon } from "../../../types/types";
+import { useAppSelector } from "../../../app/hooks";
+import ScriptModal from "./components/modals/Modal";
 
 
 //FUNCTIONAL COMPONENT
@@ -25,12 +27,13 @@ const GisLayout: FC = () => {
   const [addPoints, setAddPoints] = useState<any>([]);
   const [addPointActive, setAddPointActive] = useState<boolean>(false);
   const [deletePointActive, setDeletePointActive] = useState<boolean>(false);
+  const [addShpFileButtonActive, setAddShpFileButtonActive] = useState<boolean>(false);
   const [baseMap, setBaseMap] = useState<boolean>(true);
 
-  const [readShapfile, setReadShapfile] = useState<IGeoJSONPolygon >();
+  const [readShapfile, setReadShapfile] = useState<IGeoJSONPolygon>();
 
   const markerRef = useRef(null)
-
+  const datas = useAppSelector(state => state.gis)
 
   // MAP CONTAINER STYLES
   const { Sider, Content } = Layout;
@@ -79,12 +82,18 @@ const GisLayout: FC = () => {
     setDeletePointActive(!deletePointActive);
   };
 
+   // shafile ekleme butonu - menü üzerindeki
+   const handleAddShpButton = (): void => {  
+    setAddShpFileButtonActive(!addShpFileButtonActive);
+    console.log(addShpFileButtonActive)
+  };
+
   //Base map ekleme çıkarma 
   const handleBasemap = (e: any): void => {
     setBaseMap(!baseMap);
   };
 
-  // Haritaya tıknalındıpında yapılması gereken tüm işlemler burda yapılmalı
+  // Haritaya tıknalındığında yapılması gereken tüm işlemler burda yapılmalı
   function handleMapClick(): void {
     // Nokta ekleme butpounu aktif olduğunda bu işlemi çalıştır.
     if (addPointActive) {
@@ -106,13 +115,6 @@ const GisLayout: FC = () => {
     }
   };
 
-  // Parsel sorgudan gelen json datası bu şekilde eklenmekte.
-  const polygon: LatLngExpression[] = []; // define as an array of LatLngExpression or arrays of LatLngExpression
-  const data = dataLand.features[0].geometry.coordinates[0];
-  data.map((item: number[]) => {
-    polygon.push({ lat: item[1], lng: item[0] }); // type assertion on LatLngExpression object
-  });
-
   const purpleOptions = {
     color: 'purple',
     fillColor: '#f03',
@@ -129,19 +131,18 @@ const GisLayout: FC = () => {
     setPositionTUREF96(ITRF96)
   }, [positionWGS84, positionWGS84.lat, positionWGS84.lng])
 
-  useEffect(() => { 
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/test");        
+        const response = await axios.get("http://localhost:5000/files");
         setReadShapfile(response.data);
-        console.log(response.data);
         // İstek tamamlandıktan sonra verileri kullanabilirsiniz.
       } catch (error) {
         console.error(error);
       }
     }
-    fetchData();    
-  }, [])
+    fetchData();
+  }, [addShpFileButtonActive])
 
   return (
     <Layout>
@@ -152,7 +153,8 @@ const GisLayout: FC = () => {
             <input onChange={handleBasemap} checked={baseMap} type={"checkbox"} />
             <h3>Base Map</h3>
           </div>
-          <SelectFile />
+          <div>
+          </div>          
         </div>
       </Sider>
       <Layout>
@@ -170,6 +172,15 @@ const GisLayout: FC = () => {
             </div>
           </div>
           <div className="layout-header-tools">
+          <div className="tools-add-point">
+              <BsUpload
+                style={{ color: addShpFileButtonActive ? "#4096FF" : "white" }}
+                className="add-point-icon"
+                size={24}
+                onClick={handleAddShpButton}                
+              />
+              <h6>Add Shp</h6>
+            </div>
             <div className="tools-add-point">
               <AiFillCloseSquare
                 style={{ color: deletePointActive ? "#4096FF" : "white" }}
@@ -201,7 +212,7 @@ const GisLayout: FC = () => {
               style={{ backgroundColor: "white", cursor: addPointActive ? "pointer" : "move" }}
               ref={markerRef}
             >
-              <LocationMarker />             
+              <LocationMarker />
               <TileLayer
                 url={baseMap ? `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}` : ""}
                 attribution="Map data &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
@@ -210,11 +221,15 @@ const GisLayout: FC = () => {
                 zoomOffset={-1}
                 accessToken="pk.eyJ1IjoiYWJkdWxsYWh1Z3VyIiwiYSI6ImNqcHRnaDgxbDA1dWo0NXF3NDIzenFtcGIifQ.64t6cmzJ79MTvJzQNjShMA"
               />
+             <ScriptModal addShpFileButtonActive={addShpFileButtonActive} setAddShpFileButtonActive={setAddShpFileButtonActive}/>
+           
 
               {
-                readShapfile && <GeoJSON data={readShapfile as GeoJsonObject} />
+                readShapfile && readShapfile.map((item: IGeoJSONPolygon, i: any) => (
+                  <GeoJSON key={i} data={readShapfile as GeoJsonObject} />
+                ))
               }
-              
+
               {addPoints.map(
                 (point: any, index: React.Key | null | undefined) => (
                   <Marker

@@ -114,10 +114,6 @@
   gap: 5px;
 }
 
-.base-map>h3{
-  margin-top: 8px;
-}
-
 .leaflet-attribution-flag{
   display: none;
 }
@@ -125,3 +121,28 @@
 .leaflet-container .leaflet-control-attribution{
   display: none;
 }
+
+.script-modal{
+  z-index: 40;
+}
+
+.select-file-area-content{
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ max-width: 200px;
+ margin: auto;
+ gap: 20px;
+ cursor: pointer;
+}
+.select-file-area-content:hover{
+ color: rgb(59, 59, 255);
+ }
+.select-file-area{
+  border: 1px solid gray;
+  border-radius: 50%;
+  padding: 50px;
+  text-align: center;
+}
+

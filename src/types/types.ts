@@ -50,6 +50,7 @@ export interface Coords {
 export type SetCoords = React.Dispatch<React.SetStateAction<Coords>>;
 
 export interface IGeoJSONPolygon {
+  map(arg0: (item: any, i: any) => JSX.Element): import("react").ReactNode;
   type: "FeatureCollection",
   features: [{
     type: "Feature",
@@ -60,4 +61,7 @@ export interface IGeoJSONPolygon {
     }
   }],
   bbox: [number, number, number, number]
+}
+export interface IAllGeoJSONPolygon {
+  allReadFileData:IGeoJSONPolygon[]
 }
